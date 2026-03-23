@@ -1,14 +1,46 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { testimonials } from "../constants";
 import TitleHeader from "../components/TitleHeader";
 import GlowCard from "../components/GlowCard";
 
+gsap.registerPlugin(ScrollTrigger);
+
 const Testimonials = () => {
   const sectionRef = useRef(null);
+  const headingWords = ["What", "People", "Say", "About", "Me?"];
+  const subWords = ["Customer", "feedback", "highlights"];
 
   useGSAP(() => {
+    gsap.from(".testimonials-heading-word", {
+      y: 60,
+      opacity: 0,
+      duration: 0.9,
+      ease: "back.out(1.7)",
+      stagger: 0.18,
+      scrollTrigger: {
+        trigger: ".testimonials-heading",
+        start: "top 90%",
+        once: true,
+      },
+    });
+
+    gsap.from(".testimonials-sub-word", {
+      y: 60,
+      opacity: 0,
+      duration: 0.9,
+      ease: "back.out(1.7)",
+      stagger: 0.18,
+      delay: 0.2,
+      scrollTrigger: {
+        trigger: ".testimonials-sub",
+        start: "top 90%",
+        once: true,
+      },
+    });
+
     gsap.fromTo(
       ".testimonial-item",
       { y: 40, opacity: 0 },
@@ -42,8 +74,28 @@ const Testimonials = () => {
       <div className="testimonial-spotlight" aria-hidden="true" />
       <div className="w-full h-full md:px-10 px-5">
         <TitleHeader
-          title="What People Say About Me?"
-          sub="Customer feedback highlights"
+          title={
+            <span className="testimonials-heading inline-flex flex-wrap justify-center gap-x-3 gap-y-2">
+              {headingWords.map((word, index) => (
+                <span key={`${word}-${index}`} className="overflow-hidden pb-1">
+                  <span className="testimonials-heading-word inline-block will-change-transform">
+                    {word}
+                  </span>
+                </span>
+              ))}
+            </span>
+          }
+          sub={
+            <span className="testimonials-sub inline-flex flex-wrap justify-center gap-x-2 gap-y-1">
+              {subWords.map((word, index) => (
+                <span key={`${word}-${index}`} className="overflow-hidden pb-1">
+                  <span className="testimonials-sub-word inline-block will-change-transform">
+                    {word}
+                  </span>
+                </span>
+              ))}
+            </span>
+          }
         />
 
         <div className="lg:columns-3 md:columns-2 columns-1 mt-16">

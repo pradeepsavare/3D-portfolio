@@ -36,37 +36,10 @@ const counterItems = [
 
 const logoIconsList = [
   {
-    imgPath: "/images/logos/company-logo-1.png",
+    imgPath: "/images/iesglogo.png",
   },
   {
-    imgPath: "/images/logos/company-logo-2.png",
-  },
-  {
-    imgPath: "/images/logos/company-logo-3.png",
-  },
-  {
-    imgPath: "/images/logos/company-logo-4.png",
-  },
-  {
-    imgPath: "/images/logos/company-logo-5.png",
-  },
-  {
-    imgPath: "/images/logos/company-logo-6.png",
-  },
-  {
-    imgPath: "/images/logos/company-logo-7.png",
-  },
-  {
-    imgPath: "/images/logos/company-logo-8.png",
-  },
-  {
-    imgPath: "/images/logos/company-logo-9.png",
-  },
-  {
-    imgPath: "/images/logos/company-logo-10.png",
-  },
-  {
-    imgPath: "/images/logos/company-logo-11.png",
+    imgPath: "/images/kodnestlogo.png",
   },
 ];
 
@@ -128,7 +101,7 @@ const techStackIcons = [
     name: "SpringBoot",
     modelPath: "/models/spring-3.glb",
     scale: 0.1,
-    rotation: [0, -Math.PI / 2, 0],
+    rotation: [0, -Math.PI / 5, 0],
   },
   {
     name: "Java",
@@ -147,8 +120,8 @@ const techStackIcons = [
 const expCards = [
   {
     review: "At iESG, I contributed to industrial utility dashboards with reusable frontend architecture and API-driven data flows for real-time insights.",
-    imgPath: "/images/exp4.svg",
-    logoPath: "/images/logo1.png",
+    imgPath: "/images/iesglogo.png",
+    logoPath: "/images/iesgapp.png",
     title: "Full Stack Developer Trainee - iESG, Pune",
     date: "Dec 2025 - Present",
     responsibilities: [
@@ -159,8 +132,8 @@ const expCards = [
   },
   {
     review: "Completed intensive full stack training focused on production-style Java backend development, authentication, and end-to-end React integration.",
-    imgPath: "/images/exp5.webp",
-    logoPath: "/images/logo2.png",
+    imgPath: "/images/kodnestlogo.png",
+    logoPath: "/images/kodnestdark.png",
     title: "Java Full Stack Developer Course - Kodnest, Bangalore",
     date: "Jul 2024 - Mar 2025",
     responsibilities: [

@@ -1,10 +1,13 @@
 import { useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import TitleHeader from "../components/TitleHeader";
 import TechIconCardExperience from "../components/models/tech_logos/TechIconCardExperience";
 import { techStackIcons } from "../constants";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const TechCard3D = ({ techStackIcon }) => {
   const cardRef = useRef(null);
@@ -72,8 +75,47 @@ const TechCard3D = ({ techStackIcon }) => {
 };
 
 const TechStack = () => {
+  const headingWords = ["Core", "Technical", "Skills"];
+  const subWords = [
+    "Java,",
+    "Spring",
+    "Boot,",
+    "React,",
+    "APIs,",
+    "and",
+    "Data",
+    "Tools",
+  ];
+
   // Animate the tech cards in the skills section
   useGSAP(() => {
+    gsap.from(".skills-heading-word", {
+      y: 60,
+      opacity: 0,
+      duration: 0.9,
+      ease: "back.out(1.7)",
+      stagger: 0.18,
+      scrollTrigger: {
+        trigger: ".skills-heading",
+        start: "top 90%",
+        once: true,
+      },
+    });
+
+    gsap.from(".skills-sub-word", {
+      y: 60,
+      opacity: 0,
+      duration: 0.9,
+      ease: "back.out(1.7)",
+      stagger: 0.18,
+      delay: 0.2,
+      scrollTrigger: {
+        trigger: ".skills-sub",
+        start: "top 90%",
+        once: true,
+      },
+    });
+
     // This animation is triggered when the user scrolls to the #skills wrapper
     // The animation starts when the top of the wrapper is at the center of the screen
     // The animation is staggered, meaning each card will animate in sequence
@@ -104,8 +146,28 @@ const TechStack = () => {
     <div id="skills" className="flex-center section-padding">
       <div className="w-full h-full md:px-10 px-5">
         <TitleHeader
-          title="Core Technical Skills"
-          sub="Java, Spring Boot, React, APIs, and Data Tools"
+          title={
+            <span className="skills-heading inline-flex flex-wrap justify-center gap-x-3 gap-y-2">
+              {headingWords.map((word, index) => (
+                <span key={`${word}-${index}`} className="overflow-hidden pb-1">
+                  <span className="skills-heading-word inline-block will-change-transform">
+                    {word}
+                  </span>
+                </span>
+              ))}
+            </span>
+          }
+          sub={
+            <span className="skills-sub inline-flex flex-wrap justify-center gap-x-2 gap-y-1">
+              {subWords.map((word, index) => (
+                <span key={`${word}-${index}`} className="overflow-hidden pb-1">
+                  <span className="skills-sub-word inline-block will-change-transform">
+                    {word}
+                  </span>
+                </span>
+              ))}
+            </span>
+          }
         />
         <div className="tech-grid">
           {/* Loop through the techStackIcons array and create a component for each item. 

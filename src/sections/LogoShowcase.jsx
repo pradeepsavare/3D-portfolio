@@ -51,18 +51,18 @@ const LogoIcon = ({ icon }) => {
 };
 
 const LogoShowcase = () => (
-  <div className="md:my-20 my-10 relative">
+  <div className="md:my-20 my-10 relative w-screen left-1/2 -translate-x-1/2">
     <div className="gradient-edge" />
     <div className="gradient-edge" />
 
     <div className="marquee h-52">
       <div className="marquee-box md:gap-12 gap-5">
-        {logoIconsList.map((icon, index) => (
+        {[...logoIconsList, ...logoIconsList, ...logoIconsList, ...logoIconsList].map((icon, index) => (
           <LogoIcon key={index} icon={icon} />
         ))}
 
-        {logoIconsList.map((icon, index) => (
-          <LogoIcon key={index} icon={icon} />
+        {[...logoIconsList, ...logoIconsList, ...logoIconsList, ...logoIconsList].map((icon, index) => (
+          <LogoIcon key={`dup-${index}`} icon={icon} />
         ))}
       </div>
     </div>

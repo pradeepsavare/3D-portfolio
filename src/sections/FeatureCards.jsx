@@ -43,12 +43,13 @@ const useMousePosition = (ref) => {
 const FeatureCard = ({ imgPath, title, desc, index }) => {
   const cardRef = useRef(null);
   const { position, isHovering } = useMousePosition(cardRef);
+  const titleWords = title.split(" ");
 
   return (
     <div
       ref={cardRef}
-      className="feature-card opacity-0 translate-y-8 transition-all duration-700 ease-out"
-      style={{ transitionDelay: `${index * 100}ms` }}
+      className="feature-card opacity-0 will-change-transform"
+      style={{ "--card-delay": `${index * 140}ms` }}
     >
       <div
         className="relative h-full p-8 rounded-2xl bg-white/[0.02] overflow-hidden transition-all duration-300 ease-out"
@@ -130,7 +131,17 @@ const FeatureCard = ({ imgPath, title, desc, index }) => {
           </div>
 
           {/* Text */}
-          <h3 className="text-white text-xl font-medium">{title}</h3>
+          <h3 className="text-white text-xl font-medium flex flex-wrap gap-x-2 gap-y-1">
+            {titleWords.map((word, wordIndex) => (
+              <span
+                key={`${word}-${wordIndex}`}
+                className="feature-title-word-wrap"
+                style={{ "--word-delay": `${wordIndex * 90}ms` }}
+              >
+                <span className="feature-title-word">{word}</span>
+              </span>
+            ))}
+          </h3>
           <p className="text-white/50 text-base leading-relaxed">{desc}</p>
         </div>
 
@@ -182,9 +193,76 @@ const FeatureCards = () => {
       </div>
 
       <style jsx global>{`
+        .feature-card {
+          transform: translate3d(0, 100px, 0) scale(0.97);
+          opacity: 0;
+        }
+
         .feature-card.is-visible {
-          opacity: 1;
-          transform: translateY(0);
+          animation: featureCardDrop 900ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+          animation-delay: var(--card-delay, 0ms);
+        }
+
+        .feature-title-word-wrap {
+          overflow: hidden;
+          padding-bottom: 2px;
+        }
+
+        .feature-title-word {
+          display: inline-block;
+          opacity: 0;
+          transform: translate3d(0, 32px, 0);
+          will-change: transform, opacity;
+        }
+
+        .feature-card.is-visible .feature-title-word {
+          animation: featureTitleWordRise 700ms cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+          animation-delay: calc(var(--card-delay, 0ms) + var(--word-delay, 0ms) + 220ms);
+        }
+
+        @keyframes featureCardDrop {
+          0% {
+            opacity: 0;
+            transform: translate3d(0, 100px, 0) scale(0.97);
+          }
+
+          65% {
+            opacity: 1;
+            transform: translate3d(0, -8px, 0) scale(1.01);
+          }
+
+          100% {
+            opacity: 1;
+            transform: translate3d(0, 0, 0) scale(1);
+          }
+        }
+
+        @keyframes featureTitleWordRise {
+          0% {
+            opacity: 0;
+            transform: translate3d(0, 32px, 0);
+          }
+
+          70% {
+            opacity: 1;
+            transform: translate3d(0, -3px, 0);
+          }
+
+          100% {
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .feature-card,
+          .feature-card.is-visible,
+          .feature-title-word,
+          .feature-card.is-visible .feature-title-word {
+            animation: none !important;
+            transform: translate3d(0, 0, 0) scale(1);
+            opacity: 1;
+          }
         }
       `}</style>
     </div>

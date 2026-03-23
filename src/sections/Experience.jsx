@@ -9,7 +9,37 @@ import GlowCard from "../components/GlowCard";
 gsap.registerPlugin(ScrollTrigger);
 
 const Experience = () => {
+  const headingWords = ["Experience", "and", "Professional", "Training"];
+  const subWords = ["Career", "Journey"];
+
   useGSAP(() => {
+    gsap.from(".experience-heading-word", {
+      y: 60,
+      opacity: 0,
+      duration: 0.9,
+      ease: "back.out(1.7)",
+      stagger: 0.18,
+      scrollTrigger: {
+        trigger: ".experience-heading",
+        start: "top 90%",
+        once: true,
+      },
+    });
+
+    gsap.from(".experience-sub-word", {
+      y: 60,
+      opacity: 0,
+      duration: 0.9,
+      ease: "back.out(1.7)",
+      stagger: 0.18,
+      delay: 0.2,
+      scrollTrigger: {
+        trigger: ".experience-sub",
+        start: "top 90%",
+        once: true,
+      },
+    });
+
     // Loop through each timeline card and animate them in
     // as the user scrolls to each card
     gsap.utils.toArray(".timeline-card").forEach((card) => {
@@ -96,8 +126,28 @@ const Experience = () => {
     >
       <div className="w-full h-full md:px-20 px-5">
         <TitleHeader
-          title="Experience and Professional Training"
-          sub="Career Journey"
+          title={
+            <span className="experience-heading inline-flex flex-wrap justify-center gap-x-3 gap-y-2">
+              {headingWords.map((word, index) => (
+                <span key={`${word}-${index}`} className="overflow-hidden pb-1">
+                  <span className="experience-heading-word inline-block will-change-transform">
+                    {word}
+                  </span>
+                </span>
+              ))}
+            </span>
+          }
+          sub={
+            <span className="experience-sub inline-flex flex-wrap justify-center gap-x-2 gap-y-1">
+              {subWords.map((word, index) => (
+                <span key={`${word}-${index}`} className="overflow-hidden pb-1">
+                  <span className="experience-sub-word inline-block will-change-transform">
+                    {word}
+                  </span>
+                </span>
+              ))}
+            </span>
+          }
         />
         <div className="mt-32 relative">
           <div className="relative z-50 xl:space-y-32 space-y-10">
@@ -106,7 +156,7 @@ const Experience = () => {
                 <div className="xl:w-2/6">
                   <GlowCard card={card}>
                     <div>
-                      <img src={card.imgPath} alt="exp-img" className="invert"/>
+                      <img src={card.imgPath} alt="exp-img" />
                     </div>
                   </GlowCard>
                 </div>

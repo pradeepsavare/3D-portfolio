@@ -517,7 +517,7 @@ section {
   }
 
   .timeline-logo {
-    @apply md:size-20 size-10 flex-none rounded-full flex justify-center items-center md:-translate-y-7 border border-black-50 bg-black-100;
+    @apply md:size-20 size-10 flex-none rounded-full overflow-hidden flex justify-center items-center md:-translate-y-7 border border-black-50 bg-black-100;
     position: relative;
     z-index: 30;
   }
@@ -711,28 +711,29 @@ section {
 
 /* marquee */
 .marquee {
-  width: 100dvw;
+  width: 100%;
   overflow: hidden;
   position: relative;
 }
 .marquee-box {
   display: flex;
   align-items: center;
-  width: 200%;
+  width: max-content;
+  min-width: 200%;
   height: 100%;
-  position: absolute;
-  overflow: hidden;
-  animation: marquee 60s linear infinite;
+  position: relative;
+  animation: marquee 28s linear infinite;
+  will-change: transform;
 }
 .marquee-item {
-  float: left;
+  flex: 0 0 auto;
 }
 @keyframes marquee {
   0% {
-    left: 0;
+    transform: translate3d(0, 0, 0);
   }
   100% {
-    left: -100%;
+    transform: translate3d(-50%, 0, 0);
   }
 }
 /* marquee end */

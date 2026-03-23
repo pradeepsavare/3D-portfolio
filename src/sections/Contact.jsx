@@ -1,9 +1,27 @@
 import { useState } from "react";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import TitleHeader from "../components/TitleHeader";
 import ContactExperience from "../components/models/contact/ContactExperience";
 
+gsap.registerPlugin(ScrollTrigger);
+
 const Contact = () => {
+  const headingWords = ["Let", "us", "work", "together"];
+  const subWords = [
+    "Share",
+    "your",
+    "project",
+    "idea",
+    "and",
+    "I",
+    "will",
+    "get",
+    "back",
+    "quickly",
+  ];
   const recipientEmail = "pradeepsaware1@gmail.com";
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState("");
@@ -40,12 +58,61 @@ const Contact = () => {
     setForm({ name: "", email: "", message: "" });
   };
 
+  useGSAP(() => {
+    gsap.from(".contact-heading-word", {
+      y: 60,
+      opacity: 0,
+      duration: 0.9,
+      ease: "back.out(1.7)",
+      stagger: 0.18,
+      scrollTrigger: {
+        trigger: ".contact-heading",
+        start: "top 90%",
+        once: true,
+      },
+    });
+
+    gsap.from(".contact-sub-word", {
+      y: 60,
+      opacity: 0,
+      duration: 0.9,
+      ease: "back.out(1.7)",
+      stagger: 0.18,
+      delay: 0.2,
+      scrollTrigger: {
+        trigger: ".contact-sub",
+        start: "top 90%",
+        once: true,
+      },
+    });
+  }, []);
+
   return (
     <section id="contact" className="flex-center section-padding">
       <div className="w-full h-full md:px-10 px-5">
         <TitleHeader
-          title="Let us work together"
-          sub="Share your project idea and I will get back quickly"
+          title={
+            <span className="contact-heading inline-flex flex-wrap justify-center gap-x-3 gap-y-2">
+              {headingWords.map((word, index) => (
+                <span key={`${word}-${index}`} className="overflow-hidden pb-1">
+                  <span className="contact-heading-word inline-block will-change-transform">
+                    {word}
+                  </span>
+                </span>
+              ))}
+            </span>
+          }
+          sub={
+            <span className="contact-sub inline-flex flex-wrap justify-center gap-x-2 gap-y-1">
+              {subWords.map((word, index) => (
+                <span key={`${word}-${index}`} className="overflow-hidden pb-1">
+                  <span className="contact-sub-word inline-block will-change-transform">
+                    {word}
+                  </span>
+                </span>
+              ))}
+            </span>
+          }
         />
         <div className="grid-12-cols mt-16">
           <div className="xl:col-span-5">

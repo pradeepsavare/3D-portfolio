@@ -99,16 +99,18 @@ const AnimatedCounter = () => {
   useGSAP(() => {
     gsap.fromTo(
       ".counter-card",
-      { y: 28, opacity: 0 },
+      { y: 72, opacity: 0, scale: 0.96 },
       {
         y: 0,
         opacity: 1,
-        duration: 0.7,
+        scale: 1,
+        duration: 0.85,
         ease: "power3.out",
-        stagger: 0.12,
+        stagger: 0.18,
         scrollTrigger: {
-          trigger: "#counter",
-          start: "top 80%",
+          trigger: counterRef.current,
+          start: "top 85%",
+          once: true,
         },
       }
     );
