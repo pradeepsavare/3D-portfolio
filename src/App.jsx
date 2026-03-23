@@ -41,27 +41,83 @@ const App = () => {
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
     window.addEventListener("mouseleave", handleMouseLeave);
 
+    const setScrollVars = () => {
+      const scrollTop = window.scrollY;
+      const scrollMax = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = scrollMax > 0 ? scrollTop / scrollMax : 0;
+
+      root.style.setProperty("--scroll-progress", progress.toFixed(4));
+      root.style.setProperty("--scroll-y", `${scrollTop}px`);
+    };
+
+    const revealTargets = Array.from(document.querySelectorAll(".reveal-on-scroll"));
+    const revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.18,
+        rootMargin: "0px 0px -10% 0px",
+      }
+    );
+
+    revealTargets.forEach((target) => revealObserver.observe(target));
+    setScrollVars();
+    window.addEventListener("scroll", setScrollVars, { passive: true });
+
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseleave", handleMouseLeave);
+      window.removeEventListener("scroll", setScrollVars);
+      revealObserver.disconnect();
     };
   }, []);
 
   return (
     <>
       <FullScreenStars />
+      <div className="scroll-progress" aria-hidden="true" />
+      <div className="ambient-bg" aria-hidden="true">
+        <div className="ambient-grid" />
+        <div className="bg-orb bg-orb-cyan" />
+        <div className="bg-orb bg-orb-rose" />
+        <div className="bg-orb bg-orb-amber" />
+      </div>
       <div className="mouse-aura" aria-hidden="true" />
       <div className="app-content">
         <Navbar />
-        <Hero />
-        <ShowcaseSection />
-        <LogoShowcase />
-        <FeatureCards />
-        <Experience />
-        <TechStack />
-        <Testimonials />
-        <Contact />
-        <Footer />
+        <div className="reveal-on-scroll reveal-delay-0">
+          <Hero />
+        </div>
+        <div className="reveal-on-scroll reveal-delay-1">
+          <ShowcaseSection />
+        </div>
+        <div className="reveal-on-scroll reveal-delay-2">
+          <LogoShowcase />
+        </div>
+        <div className="reveal-on-scroll reveal-delay-1">
+          <FeatureCards />
+        </div>
+        <div className="reveal-on-scroll reveal-delay-2">
+          <Experience />
+        </div>
+        <div className="reveal-on-scroll reveal-delay-1">
+          <TechStack />
+        </div>
+        <div className="reveal-on-scroll reveal-delay-2">
+          <Testimonials />
+        </div>
+        <div className="reveal-on-scroll reveal-delay-1">
+          <Contact />
+        </div>
+        <div className="reveal-on-scroll reveal-delay-0">
+          <Footer />
+        </div>
       </div>
     </>
   );

@@ -1,10 +1,75 @@
+import { useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 
 import TitleHeader from "../components/TitleHeader";
 import TechIconCardExperience from "../components/models/tech_logos/TechIconCardExperience";
 import { techStackIcons } from "../constants";
-// import { techStackImgs } from "../constants";
+
+const TechCard3D = ({ techStackIcon }) => {
+  const cardRef = useRef(null);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const [glowPos, setGlowPos] = useState({ x: 50, y: 50 });
+  const [hovering, setHovering] = useState(false);
+
+  const handleMouseMove = (e) => {
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = (e.clientX - rect.left - rect.width / 2) / (rect.width / 2);
+    const y = (e.clientY - rect.top - rect.height / 2) / (rect.height / 2);
+    setTilt({ x, y });
+    setGlowPos({
+      x: ((e.clientX - rect.left) / rect.width) * 100,
+      y: ((e.clientY - rect.top) / rect.height) * 100,
+    });
+  };
+
+  return (
+    <div
+      ref={cardRef}
+      className="card-border tech-card overflow-hidden group xl:rounded-full rounded-lg"
+      style={{
+        willChange: "transform",
+        transform: hovering
+          ? `perspective(800px) rotateX(${-tilt.y * 9}deg) rotateY(${tilt.x * 9}deg) translateZ(18px) scale(1.05)`
+          : "perspective(800px) rotateX(0deg) rotateY(0deg) translateZ(0px) scale(1)",
+        transition: hovering
+          ? "transform 0.09s ease-out, box-shadow 0.3s ease, border-color 0.3s ease"
+          : "transform 0.55s cubic-bezier(0.23,1,0.32,1), box-shadow 0.55s ease, border-color 0.55s ease",
+        boxShadow: hovering
+          ? "0 28px 56px rgba(0,0,0,0.55), 0 0 40px rgba(102,232,255,0.15)"
+          : undefined,
+        borderColor: hovering ? "rgba(102,232,255,0.28)" : undefined,
+      }}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setHovering(true)}
+      onMouseLeave={() => {
+        setHovering(false);
+        setTilt({ x: 0, y: 0 });
+        setGlowPos({ x: 50, y: 50 });
+      }}
+    >
+      <div className="tech-card-animated-bg" />
+      {/* Cursor-following inner glow */}
+      <div
+        className="absolute inset-0 pointer-events-none z-20"
+        style={{
+          opacity: hovering ? 1 : 0,
+          background: `radial-gradient(circle at ${glowPos.x}% ${glowPos.y}%, rgba(102,232,255,0.14) 0%, transparent 60%)`,
+          transition: "opacity 0.3s ease",
+          borderRadius: "inherit",
+        }}
+      />
+      <div className="tech-card-content">
+        <div className="tech-icon-wrapper">
+          <TechIconCardExperience model={techStackIcon} />
+        </div>
+        <div className="padding-x w-full">
+          <p>{techStackIcon.name}</p>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const TechStack = () => {
   // Animate the tech cards in the skills section
@@ -48,46 +113,8 @@ const TechStack = () => {
               card-border, tech-card, overflow-hidden, and group. The xl:rounded-full and rounded-lg 
               classes are only applied on larger screens. */}
           {techStackIcons.map((techStackIcon) => (
-            <div
-              key={techStackIcon.name}
-              className="card-border tech-card overflow-hidden group xl:rounded-full rounded-lg"
-            >
-              {/* The tech-card-animated-bg div is used to create a background animation when the 
-                  component is hovered. */}
-              <div className="tech-card-animated-bg" />
-              <div className="tech-card-content">
-                {/* The tech-icon-wrapper div contains the TechIconCardExperience component, 
-                    which renders the 3D model of the tech stack icon. */}
-                <div className="tech-icon-wrapper">
-                  <TechIconCardExperience model={techStackIcon} />
-                </div>
-                {/* The padding-x and w-full classes are used to add horizontal padding to the 
-                    text and make it take up the full width of the component. */}
-                <div className="padding-x w-full">
-                  {/* The p tag contains the name of the tech stack icon. */}
-                  <p>{techStackIcon.name}</p>
-                </div>
-              </div>
-            </div>
+            <TechCard3D key={techStackIcon.name} techStackIcon={techStackIcon} />
           ))}
-
-          {/* This is for the img part */}
-          {/* {techStackImgs.map((techStackIcon, index) => (
-            <div
-              key={index}
-              className="card-border tech-card overflow-hidden group xl:rounded-full rounded-lg"
-            >
-              <div className="tech-card-animated-bg" />
-              <div className="tech-card-content">
-                <div className="tech-icon-wrapper">
-                  <img src={techStackIcon.imgPath} alt="" />
-                </div>
-                <div className="padding-x w-full">
-                  <p>{techStackIcon.name}</p>
-                </div>
-              </div>
-            </div>
-          ))} */}
         </div>
       </div>
     </div>
