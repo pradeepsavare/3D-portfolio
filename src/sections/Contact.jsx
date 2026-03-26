@@ -5,6 +5,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import TitleHeader from "../components/TitleHeader";
 import ContactExperience from "../components/models/contact/ContactExperience";
+import useInViewOnce from "../hooks/useInViewOnce";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -29,6 +30,10 @@ const Contact = () => {
     name: "",
     email: "",
     message: "",
+  });
+  const { targetRef: contact3DRef, isInView: showContact3D } = useInViewOnce({
+    threshold: 0.15,
+    rootMargin: "180px 0px",
   });
 
   const openMailFallback = () => {
@@ -177,8 +182,11 @@ const Contact = () => {
             </div>
           </div>
           <div className="xl:col-span-7 min-h-96">
-            <div className="bg-[#cd7c2e] w-full h-full hover:cursor-grab rounded-3xl overflow-hidden">
-              <ContactExperience />
+            <div
+              ref={contact3DRef}
+              className="bg-[#cd7c2e] w-full h-full hover:cursor-grab rounded-3xl overflow-hidden"
+            >
+              {showContact3D ? <ContactExperience /> : null}
             </div>
           </div>
         </div>

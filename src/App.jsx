@@ -14,6 +14,12 @@ import FullScreenStars from "./components/FullScreenStars";
 const App = () => {
   useEffect(() => {
     const root = document.documentElement;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const isCoarsePointer = window.matchMedia("(hover: none), (pointer: coarse)").matches;
+
+    let pointerFrame = null;
+    let scrollFrame = null;
+    let lastPointer = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
 
     const setMouseVars = (x, y) => {
       const xPercent = (x / window.innerWidth) * 100;
@@ -29,17 +35,28 @@ const App = () => {
       root.style.setProperty("--tilt-y", `${xTilt.toFixed(2)}deg`);
     };
 
+    const flushPointer = () => {
+      pointerFrame = null;
+      setMouseVars(lastPointer.x, lastPointer.y);
+    };
+
     const handleMouseMove = (event) => {
-      setMouseVars(event.clientX, event.clientY);
+      if (prefersReducedMotion || isCoarsePointer) return;
+      lastPointer = { x: event.clientX, y: event.clientY };
+      if (!pointerFrame) pointerFrame = requestAnimationFrame(flushPointer);
     };
 
     const handleMouseLeave = () => {
-      setMouseVars(window.innerWidth / 2, window.innerHeight / 2);
+      if (prefersReducedMotion || isCoarsePointer) return;
+      lastPointer = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+      if (!pointerFrame) pointerFrame = requestAnimationFrame(flushPointer);
     };
 
-    setMouseVars(window.innerWidth / 2, window.innerHeight / 2);
-    window.addEventListener("mousemove", handleMouseMove, { passive: true });
-    window.addEventListener("mouseleave", handleMouseLeave);
+    if (!prefersReducedMotion && !isCoarsePointer) {
+      setMouseVars(window.innerWidth / 2, window.innerHeight / 2);
+      window.addEventListener("mousemove", handleMouseMove, { passive: true });
+      window.addEventListener("mouseleave", handleMouseLeave);
+    }
 
     const setScrollVars = () => {
       const scrollTop = window.scrollY;
@@ -48,6 +65,14 @@ const App = () => {
 
       root.style.setProperty("--scroll-progress", progress.toFixed(4));
       root.style.setProperty("--scroll-y", `${scrollTop}px`);
+    };
+
+    const scheduleScrollVars = () => {
+      if (scrollFrame) return;
+      scrollFrame = requestAnimationFrame(() => {
+        scrollFrame = null;
+        setScrollVars();
+      });
     };
 
     const revealTargets = Array.from(document.querySelectorAll(".reveal-on-scroll"));
@@ -68,12 +93,14 @@ const App = () => {
 
     revealTargets.forEach((target) => revealObserver.observe(target));
     setScrollVars();
-    window.addEventListener("scroll", setScrollVars, { passive: true });
+    window.addEventListener("scroll", scheduleScrollVars, { passive: true });
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseleave", handleMouseLeave);
-      window.removeEventListener("scroll", setScrollVars);
+      window.removeEventListener("scroll", scheduleScrollVars);
+      if (pointerFrame) cancelAnimationFrame(pointerFrame);
+      if (scrollFrame) cancelAnimationFrame(scrollFrame);
       revealObserver.disconnect();
     };
   }, []);
@@ -81,7 +108,6 @@ const App = () => {
   return (
     <>
       <FullScreenStars />
-      <div className="scroll-progress" aria-hidden="true" />
       <div className="ambient-bg" aria-hidden="true">
         <div className="ambient-grid" />
         <div className="bg-orb bg-orb-cyan" />

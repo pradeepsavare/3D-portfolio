@@ -128,9 +128,9 @@ const AppShowcase = () => {
 
             <div className="project" ref={ycDirectoryRef}>
               <HoloImageWrapper className="image-wrapper bg-[#FFE7EB]">
-                <img src="/images/project3.png" alt="LearnSphere e-learning platform" />
+                <img src="/images/chatbuddy.png" alt="LearnSphere e-learning platform" />
               </HoloImageWrapper>
-              <h2>LearnSphere: Service-Oriented E-Learning Platform</h2>
+              <h2>ChatBuddy | MultiModel AI Chat</h2>
             </div>
           </div>
         </div>

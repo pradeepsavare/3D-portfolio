@@ -5,9 +5,10 @@ import { Stars } from "@react-three/drei";
 const StarLayer = () => {
   const travelRef = useRef(null);
   const scrollProgress = useRef(0);
+  const frameAccumulator = useRef(0);
 
   const starData = useMemo(() => {
-    const count = 1400;
+    const count = 950;
     const rangeX = 140;
     const rangeY = 90;
     const nearZ = 20;
@@ -43,6 +44,10 @@ const StarLayer = () => {
 
   useFrame((state, delta) => {
     if (!travelRef.current) return;
+    frameAccumulator.current += delta;
+    if (frameAccumulator.current < 1 / 45) return;
+    const frameDelta = frameAccumulator.current;
+    frameAccumulator.current = 0;
 
     const progress = scrollProgress.current;
     const motionBoost = 1 + progress * 8;
@@ -52,7 +57,7 @@ const StarLayer = () => {
 
     for (let i = 0; i < starData.count; i++) {
       const i3 = i * 3;
-      positions[i3 + 2] += delta * starData.speeds[i] * motionBoost;
+      positions[i3 + 2] += frameDelta * starData.speeds[i] * motionBoost;
 
       if (positions[i3 + 2] > starData.nearZ) {
         positions[i3 + 2] = starData.farZ;
@@ -70,11 +75,11 @@ const StarLayer = () => {
       <Stars
         radius={180}
         depth={110}
-        count={9000}
-        factor={4.2}
+        count={5200}
+        factor={3.4}
         saturation={0}
         fade
-        speed={0.55}
+        speed={0.4}
       />
 
       <points ref={travelRef}>
@@ -103,8 +108,8 @@ const FullScreenStars = () => {
   return (
     <div className="full-screen-stars" aria-hidden="true">
       <Canvas
-        dpr={[1, 1.5]}
-        gl={{ antialias: true, powerPreference: "high-performance" }}
+        dpr={[0.8, 1.2]}
+        gl={{ antialias: false, powerPreference: "high-performance" }}
         camera={{ position: [0, 0, 28], fov: 60 }}
       >
         <StarLayer />

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -6,65 +6,95 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import TitleHeader from "../components/TitleHeader";
 import TechIconCardExperience from "../components/models/tech_logos/TechIconCardExperience";
 import { techStackIcons } from "../constants";
+import useInViewOnce from "../hooks/useInViewOnce";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const TechCard3D = ({ techStackIcon }) => {
   const cardRef = useRef(null);
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
-  const [glowPos, setGlowPos] = useState({ x: 50, y: 50 });
-  const [hovering, setHovering] = useState(false);
+  const frameRef = useRef(null);
+  const pointerRef = useRef({ x: 0, y: 0, glowX: 50, glowY: 50 });
+  const hoveringRef = useRef(false);
+  const { targetRef, isInView } = useInViewOnce({ threshold: 0.15, rootMargin: "140px 0px" });
+
+  const setCardTransform = ({ x, y, glowX, glowY }, hovering) => {
+    const cardNode = cardRef.current;
+    if (!cardNode) return;
+
+    cardNode.style.setProperty("--glow-x", `${glowX}%`);
+    cardNode.style.setProperty("--glow-y", `${glowY}%`);
+
+    cardNode.style.transform = hovering
+      ? `perspective(800px) rotateX(${-y * 9}deg) rotateY(${x * 9}deg) translateZ(18px) scale(1.05)`
+      : "perspective(800px) rotateX(0deg) rotateY(0deg) translateZ(0px) scale(1)";
+
+    cardNode.style.transition = hovering
+      ? "transform 0.09s ease-out, box-shadow 0.3s ease, border-color 0.3s ease"
+      : "transform 0.55s cubic-bezier(0.23,1,0.32,1), box-shadow 0.55s ease, border-color 0.55s ease";
+
+    cardNode.style.boxShadow = hovering
+      ? "0 28px 56px rgba(0,0,0,0.55), 0 0 40px rgba(102,232,255,0.15)"
+      : "";
+
+    cardNode.style.borderColor = hovering ? "rgba(102,232,255,0.28)" : "";
+  };
+
+  const flushPointer = () => {
+    frameRef.current = null;
+    setCardTransform(pointerRef.current, hoveringRef.current);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (frameRef.current) cancelAnimationFrame(frameRef.current);
+    };
+  }, []);
 
   const handleMouseMove = (e) => {
     const rect = cardRef.current.getBoundingClientRect();
     const x = (e.clientX - rect.left - rect.width / 2) / (rect.width / 2);
     const y = (e.clientY - rect.top - rect.height / 2) / (rect.height / 2);
-    setTilt({ x, y });
-    setGlowPos({
-      x: ((e.clientX - rect.left) / rect.width) * 100,
-      y: ((e.clientY - rect.top) / rect.height) * 100,
-    });
+    pointerRef.current = {
+      x,
+      y,
+      glowX: ((e.clientX - rect.left) / rect.width) * 100,
+      glowY: ((e.clientY - rect.top) / rect.height) * 100,
+    };
+
+    if (!frameRef.current) {
+      frameRef.current = requestAnimationFrame(flushPointer);
+    }
   };
 
   return (
     <div
       ref={cardRef}
-      className="card-border tech-card overflow-hidden group xl:rounded-full rounded-lg"
-      style={{
-        willChange: "transform",
-        transform: hovering
-          ? `perspective(800px) rotateX(${-tilt.y * 9}deg) rotateY(${tilt.x * 9}deg) translateZ(18px) scale(1.05)`
-          : "perspective(800px) rotateX(0deg) rotateY(0deg) translateZ(0px) scale(1)",
-        transition: hovering
-          ? "transform 0.09s ease-out, box-shadow 0.3s ease, border-color 0.3s ease"
-          : "transform 0.55s cubic-bezier(0.23,1,0.32,1), box-shadow 0.55s ease, border-color 0.55s ease",
-        boxShadow: hovering
-          ? "0 28px 56px rgba(0,0,0,0.55), 0 0 40px rgba(102,232,255,0.15)"
-          : undefined,
-        borderColor: hovering ? "rgba(102,232,255,0.28)" : undefined,
-      }}
+      className="card-border tech-card tech-card-tilt overflow-hidden group xl:rounded-full rounded-lg"
+      style={{ willChange: "transform" }}
       onMouseMove={handleMouseMove}
-      onMouseEnter={() => setHovering(true)}
+      onMouseEnter={() => {
+        hoveringRef.current = true;
+        setCardTransform(pointerRef.current, true);
+      }}
       onMouseLeave={() => {
-        setHovering(false);
-        setTilt({ x: 0, y: 0 });
-        setGlowPos({ x: 50, y: 50 });
+        hoveringRef.current = false;
+        pointerRef.current = { x: 0, y: 0, glowX: 50, glowY: 50 };
+        if (frameRef.current) {
+          cancelAnimationFrame(frameRef.current);
+          frameRef.current = null;
+        }
+        setCardTransform(pointerRef.current, false);
       }}
     >
       <div className="tech-card-animated-bg" />
       {/* Cursor-following inner glow */}
       <div
-        className="absolute inset-0 pointer-events-none z-20"
-        style={{
-          opacity: hovering ? 1 : 0,
-          background: `radial-gradient(circle at ${glowPos.x}% ${glowPos.y}%, rgba(102,232,255,0.14) 0%, transparent 60%)`,
-          transition: "opacity 0.3s ease",
-          borderRadius: "inherit",
-        }}
+        className="absolute inset-0 pointer-events-none z-20 tech-card-glow"
+        style={{ borderRadius: "inherit" }}
       />
       <div className="tech-card-content">
-        <div className="tech-icon-wrapper">
-          <TechIconCardExperience model={techStackIcon} />
+        <div ref={targetRef} className="tech-icon-wrapper">
+          {isInView ? <TechIconCardExperience model={techStackIcon} /> : null}
         </div>
         <div className="padding-x w-full">
           <p>{techStackIcon.name}</p>

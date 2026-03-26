@@ -12,7 +12,11 @@ const HeroExperience = () => {
   const isTablet = useMediaQuery({ query: "(max-width: 1024px)" });
 
   return (
-    <Canvas camera={{ position: [0, 0, 15], fov: 45 }}>
+    <Canvas
+      dpr={[0.9, 1.3]}
+      gl={{ antialias: false, powerPreference: "high-performance" }}
+      camera={{ position: [0, 0, 15], fov: 45 }}
+    >
       {/* deep blue ambient */}
       <ambientLight intensity={0.2} color="#1a1a40" />
       {/* Configure OrbitControls to disable panning and control zoom based on device type */}

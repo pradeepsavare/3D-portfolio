@@ -27,6 +27,17 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+html,
+body {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+}
+
 .full-screen-stars {
   position: fixed;
   inset: 0;
@@ -532,6 +543,22 @@ section {
 
   .tech-card-animated-bg {
     @apply absolute left-0 bottom-[-100%] w-full h-full bg-[#2D3240] group-hover:bottom-0 transition-all duration-700;
+  }
+
+  .tech-card-tilt {
+    --glow-x: 50%;
+    --glow-y: 50%;
+    transform: perspective(800px) rotateX(0deg) rotateY(0deg) translateZ(0px) scale(1);
+  }
+
+  .tech-card-glow {
+    opacity: 0;
+    background: radial-gradient(circle at var(--glow-x) var(--glow-y), rgba(102,232,255,0.14) 0%, transparent 60%);
+    transition: opacity 0.3s ease;
+  }
+
+  .tech-card:hover .tech-card-glow {
+    opacity: 1;
   }
 
   .tech-card-content {
