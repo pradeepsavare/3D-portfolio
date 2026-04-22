@@ -41,6 +41,12 @@ const logoIconsList = [
   {
     imgPath: "/images/kodnestlogo.png",
   },
+  {
+    imgPath: "/images/styleunionwhite.png",
+  },
+  {
+    imgPath: "/images/amanora.png",
+  },
 ];
 
 const abilities = [
