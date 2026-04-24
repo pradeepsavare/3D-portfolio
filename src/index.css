@@ -628,7 +628,7 @@ section {
     }
 
     .footer-container {
-      @apply grid grid-cols-1 md:grid-cols-3 gap-8 w-full;
+      @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 w-full;
     }
 
     .footer-links-grid {
@@ -640,7 +640,7 @@ section {
     }
 
     .footer-bottom {
-      @apply mt-8 pt-6 border-t border-black-50 flex md:flex-row flex-col gap-3 items-center justify-between text-sm text-white-50;
+      @apply mt-8 pt-6 border-t border-black-50 flex flex-col sm:flex-row gap-3 items-center justify-between text-sm text-white-50 text-center sm:text-left;
     }
 
     .socials {
