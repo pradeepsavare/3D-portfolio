@@ -167,46 +167,46 @@ const expLogos = [
 
 const testimonials = [
   {
-    name: "Utility Operations Team",
-    mentions: "Vidyutt.io Stakeholder",
+    name: "Aryan Kamble",
+    mentions: "Embedded Developer @iESG, Pune",
     review:
       "Pradeep built responsive React dashboards for our utility monitoring workflows and made complex sensor data easy to track in real time. The interface is clean, fast, and practical for daily operations.",
-    imgPath: "/images/client1.png",
+    imgPath: "/images/aryan.png",
   },
   {
-    name: "Project Mentor",
-    mentions: "iESG, Pune",
+    name: "Sumit Tanpure",
+    mentions: "Co-Founder @iESG, Pune",
     review:
       "Pradeep delivered reusable frontend components and integrated REST APIs with a strong focus on maintainability. His approach to query handling and dynamic rendering improved both performance and developer productivity.",
-    imgPath: "/images/client3.png",
+    imgPath: "/images/sumitsir.jpeg",
   },
   {
-    name: "Full Stack Trainer",
-    mentions: "Kodnest Program",
+    name: "Nagesh Patil",
+    mentions: "Software Engineer @SnapBizz Cloudtech, Bangalore",
     review:
       "During training, Pradeep consistently built solid Java and Spring Boot solutions with proper MVC structure, JWT authentication, and clean database integration. He combines backend fundamentals with practical frontend execution.",
-    imgPath: "/images/client2.png",
+    imgPath: "/images/nagesh.jpeg",
   },
   {
-    name: "Learning Platform Reviewer",
-    mentions: "LearnSphere Project",
+    name: "Omkar Biradar",
+    mentions: "Software Engineer @John Deere, Pune",
     review:
       "LearnSphere shows Pradeep's ability to design end-to-end systems for student and trainer workflows. The service-oriented architecture and feature planning demonstrate strong product thinking.",
-    imgPath: "/images/client5.png",
+    imgPath: "/images/omkar.jpeg",
   },
   {
-    name: "API Integration Reviewer",
-    mentions: "Industrial Dashboard Module",
+    name: "Angad Patil",
+    mentions: "Technical Architect @Allianz Group,Pune",
     review:
       "Pradeep handled multiple utility endpoints and converted raw sensor streams into usable visual dashboards. His implementation is reliable and scalable for expanding modules like fire panels and water meters.",
-    imgPath: "/images/client4.png",
+    imgPath: "/images/angad.jpeg",
   },
   {
-    name: "Peer Developer",
-    mentions: "Java Full Stack Cohort",
+    name: "Omkar Abhang",
+    mentions: "Software Engineer @iESG, Pune",
     review:
       "Pradeep is strong in both backend and frontend collaboration. He uses GitHub workflows effectively, writes clean code, and quickly adapts to new requirements across Java, React, and MySQL stacks.",
-    imgPath: "/images/client6.png",
+    imgPath: "/images/omkarA.jpeg",
   },
 ];
 
