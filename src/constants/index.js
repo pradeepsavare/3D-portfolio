@@ -29,7 +29,7 @@ const words = [
 ];
 
 const counterItems = [
-  { value: 6, suffix: "+", label: "Months of Hands-On Training" },
+  { value: 11, suffix: "+", label: "Months of Hands-On Training" },
   { value: 15, suffix: "+", label: "Projects Built" },
   { value: 10, suffix: "+", label: "Core Technologies Used" },
 ];
@@ -53,7 +53,7 @@ const abilities = [
   {
     imgPath: "/images/seo.png",
     title: "Backend Engineering",
-    desc: "Building secure backend systems using Java, Spring Boot, Hibernate, JDBC, and MySQL.",
+    desc: "Building secure backend systems using Java, Python. Spring Boot, Hibernate, JDBC, and MySQL.",
   },
   {
     imgPath: "/images/chat.png",
@@ -63,7 +63,7 @@ const abilities = [
   {
     imgPath: "/images/time.png",
     title: "Data + API Integration",
-    desc: "Connecting real-time utility and business data through REST APIs, dynamic rendering, and query handling.",
+    desc: "Connecting real-time utility and business data through REST APIs, MQTT, dynamic rendering, and query handling.",
   },
 ];
 
